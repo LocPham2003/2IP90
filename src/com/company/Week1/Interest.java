@@ -1,4 +1,4 @@
-package com.company;
+package com.company.Week1;
 
 /**
  * @author Loc Pham

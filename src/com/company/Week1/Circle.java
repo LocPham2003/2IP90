@@ -4,7 +4,7 @@
  * @ID 1682512
  */
 
-package com.company;
+package com.company.Week1;
 
 import java.util.Scanner;
 
