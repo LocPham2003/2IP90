@@ -1,6 +1,5 @@
 package com.company.Week2;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -129,41 +128,44 @@ public class KingPalindromeList {
             int length = getLengthOfNumber(number); // The number of characters of the current number
             long[] charInNumber = getDigitsOfNumber(number, length); // The array to store digits of the current number
 
-            long[] rightHandDigits = new long[0];
-            long[] leftHandDigits = new long[0];
+            if (charInNumber.length % 2 != 0) {
+                long[] rightHandDigits = new long[0];
+                long[] leftHandDigits = new long[0];
 
-            // Get right-hand and left-hand side digits
-            for (int i = 0; i < charInNumber.length/2; i++) {
+                // Get right-hand and left-hand side digits
+                for (int i = 0; i < charInNumber.length/2; i++) {
                     leftHandDigits = addValueToArray(leftHandDigits, charInNumber[charInNumber.length / 2 + (i + 1)], leftHandDigits.length);
                     rightHandDigits = addValueToArray(rightHandDigits, charInNumber[charInNumber.length / 2 - (i + 1)], rightHandDigits.length);
-            }
+                }
 
-            long leftHandNumber = reconstructNumber(leftHandDigits, (long) Math.pow(10, leftHandDigits.length - 1));
-            long rightHandNumber = reconstructNumber(rightHandDigits, (long) Math.pow(10, rightHandDigits.length - 1));
+                long leftHandNumber = reconstructNumber(leftHandDigits, (long) Math.pow(10, leftHandDigits.length - 1));
+                long rightHandNumber = reconstructNumber(rightHandDigits, (long) Math.pow(10, rightHandDigits.length - 1));
 
-            // Compare the left and the right-hand side of the number
-            if (rightHandNumber > leftHandNumber) {
-                charInNumber[charInNumber.length / 2]++;
+                // Compare the left and the right-hand side of the number
+                if (rightHandNumber > leftHandNumber) {
+                    charInNumber[charInNumber.length / 2]++;
 
-                if (charInNumber[charInNumber.length / 2] == 10) {
-                    charInNumber[charInNumber.length / 2] = 0;
-                    for (int i = 0; i < leftHandDigits.length - 1; i++) {
-                        if (leftHandDigits[i]++ == 10) {
-                            leftHandDigits[i] = 0;
+                    if (charInNumber[charInNumber.length / 2] == 10) {
+                        charInNumber[charInNumber.length / 2] = 0;
+                        for (int i = 0; i < leftHandDigits.length - 1; i++) {
+                            if (leftHandDigits[i]++ == 10) {
+                                leftHandDigits[i] = 0;
+                            }
                         }
                     }
                 }
-            }
 
-            for (int i = leftHandDigits.length - 1; i >= 0; i--) {
-                charInNumber[(leftHandDigits.length - 1) - i] = leftHandDigits[i];
-                charInNumber[charInNumber.length - (i + 1)] = leftHandDigits[(leftHandDigits.length - 1) - i];
-            }
+                for (int i = leftHandDigits.length - 1; i >= 0; i--) {
+                    charInNumber[(leftHandDigits.length - 1) - i] = leftHandDigits[i];
+                    charInNumber[charInNumber.length - (i + 1)] = leftHandDigits[(leftHandDigits.length - 1) - i];
+                }
 
-            // Reconstruct the array
-            long coefficient = (long) Math.pow(10, length-1);
-            palindromeList[index] = reconstructNumber(charInNumber, coefficient);
-            index++;
+                // Reconstruct the array
+                long coefficient = (long) Math.pow(10, length-1);
+                palindromeList[index] = reconstructNumber(charInNumber, coefficient);
+                index++;
+
+            }
         }
 
         return palindromeList;
