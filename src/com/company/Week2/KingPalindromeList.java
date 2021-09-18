@@ -1,5 +1,6 @@
 package com.company.Week2;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -171,7 +172,7 @@ public class KingPalindromeList {
     /**
      * This method will perform task 2 of the assignment
      */
-    public void task2(long[] list){
+    public long[] task2(long[] list){
         // Get correct list
         list = task1(list);
         list = sortAscending(list);
@@ -208,7 +209,7 @@ public class KingPalindromeList {
             }
         }
 
-        // Get all sets whose occurrence is more than 1
+        // Get all sets whose occurrence is more than 2
         long[] index = new long[0];
         for (int i = 0; i < foundedMiddleValues.length; i++) {
             if (foundedMiddleValues[i].length > 1) {
@@ -252,16 +253,27 @@ public class KingPalindromeList {
             }
         }
 
-        // Output the largest magical set
-        System.out.println(foundedMiddleValues[greatestIndex].length);
-
+        return foundedMiddleValues[greatestIndex];
     }
 
     /**
      * This method will perform task 3 of the assignment
      */
     public void task3(long[] list){
+        long[] longestMagicSet = task2(list);
 
+        if (longestMagicSet.length <= 2) {
+            System.out.println(longestMagicSet[longestMagicSet.length - 1]);
+        } else {
+            for (int i = 0; i < longestMagicSet.length; i++) {
+                System.out.print(longestMagicSet[i]);
+                if (i != longestMagicSet.length - 1) {
+                    System.out.print(" ");
+                }
+            }
+
+            System.out.println();
+        }
     }
 
     public void run(){
@@ -288,7 +300,7 @@ public class KingPalindromeList {
                 System.out.println();
                 break;
             case 2:
-                task2(palindromeList);
+                System.out.println(task2(palindromeList).length);
                 break;
             case 3:
                 task3(palindromeList);
