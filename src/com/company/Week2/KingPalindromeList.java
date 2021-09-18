@@ -1,6 +1,5 @@
 package com.company.Week2;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -31,6 +30,7 @@ public class KingPalindromeList {
         for (int i : digits) {
             number += i * length;
             length /= 10;
+
         }
 
         return number;
@@ -114,15 +114,32 @@ public class KingPalindromeList {
             int[] rightHandDigits = new int[0];
             int[] leftHandDigits = new int[0];
 
-            // Get right-hand side digits
+            // Get right-hand and left-hand side digits
             for (int i = 0; i < charInNumber.length/2; i++) {
-
+                    leftHandDigits = addValueToArray(leftHandDigits, charInNumber[charInNumber.length - (i + 1)], leftHandDigits.length);
+                    rightHandDigits = addValueToArray(rightHandDigits, charInNumber[charInNumber.length / 2 - (i + 1)], rightHandDigits.length);
             }
 
-            //Reverse the digits so they can be in correct order
+            int leftHandNumber = reconstructNumber(leftHandDigits, Math.pow(10, leftHandDigits.length - 1));
+            int rightHandNumber = reconstructNumber(rightHandDigits, Math.pow(10, rightHandDigits.length - 1));
 
             // Compare the left and the right-hand side of the number
+            if (rightHandNumber > leftHandNumber) {
+                charInNumber[charInNumber.length / 2]++;
 
+                if (charInNumber[charInNumber.length / 2] == 10) {
+                    charInNumber[charInNumber.length / 2] = 0;
+                    for (int i = 1; i < leftHandDigits.length; i++) {
+                        if (leftHandDigits[i]++ == 10) {
+                            leftHandDigits[i] = 0;
+                        }
+                    }
+                }
+            }
+
+            for (int i = 0; i < leftHandDigits.length; i++) {
+                charInNumber[i] = leftHandDigits[i];
+            }
 
             // Reconstruct the array
             double coefficient = Math.pow(10, length-1);
@@ -275,8 +292,14 @@ public class KingPalindromeList {
 
         switch (choice) {
             case 1:
-                for (int number : task1(palindromeList)){
-                    System.out.print(number + " ");
+                palindromeList = task1(palindromeList);
+
+                for (int i = 0; i < palindromeList.length; i++){
+                    System.out.print(palindromeList[i]);
+
+                    if (i != palindromeList.length - 1) {
+                        System.out.print(" ");
+                    }
                 }
                 System.out.println();
                 break;
