@@ -8,10 +8,10 @@ public class IntChar {
     }
 
     public static void main(String[] args) {
-        int a = 0;
-        doSomething(a);
+        double a = 0002;
+        double b = 0031;
 
-        System.out.println(a);
+        System.out.println(b - a);
     }
 }
 

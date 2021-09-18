@@ -1,7 +1,7 @@
 package com.company.Week2;
 
+import java.util.Arrays;
 import java.util.Scanner;
-
 
 /**
  * KingsPalindrome.java
@@ -98,7 +98,7 @@ public class KingPalindromeList {
             otherIndex++;
         }
 
-        return reconstructNumber(comparable, Math.pow(10, comparable.length));
+        return reconstructNumber(comparable, Math.pow(10, comparable.length - 1));
     }
 
     /**
@@ -111,29 +111,18 @@ public class KingPalindromeList {
             int length = getLengthOfNumber(number); // The number of characters of the current number
             int[] charInNumber = getDigitsOfNumber(number, length); // The array to store digits of the current number
 
-            charInNumber = reverse(charInNumber, length);
+            int[] rightHandDigits = new int[0];
+            int[] leftHandDigits = new int[0];
 
-            // Compare digits and correct numbers to palindrome
-            int o = 0;
-            while (o < length/2) {
-                if (charInNumber[length / 2 - (o + 1)] < charInNumber[length / 2 + (o + 1)]) {
-                    charInNumber[length / 2] += 1;
-                    o += length / 2;
+            // Get right-hand side digits
+            for (int i = 0; i < charInNumber.length/2; i++) {
 
-                    if (charInNumber[length / 2] == 10) {
-                        charInNumber[length / 2] = 0;
-                        charInNumber[length / 2 - 1]++;
-                    }
-                } else {
-                    o++;
-                }
             }
 
-            o = 0;
-            while (o < length/2) {
-                charInNumber[length - (o + 1)] = charInNumber[o];
-                o++;
-            }
+            //Reverse the digits so they can be in correct order
+
+            // Compare the left and the right-hand side of the number
+
 
             // Reconstruct the array
             double coefficient = Math.pow(10, length-1);
@@ -161,6 +150,23 @@ public class KingPalindromeList {
     }
 
     /**
+     * This method will remove the value at provided index
+     */
+    public static int[] removeElement(int[] arr, int index) {
+        int[] b = new int[arr.length - 1];
+
+        int k = 0;
+        for (int i = 0;  i < arr.length; i++) {
+            if (i != index) {
+                b[k] = arr[i];
+                k++;
+            }
+        }
+
+        return b;
+    }
+
+    /**
      * This method will perform task 2 of the assignment
      */
     public void task2(int[] list){
@@ -178,6 +184,27 @@ public class KingPalindromeList {
             foundedMiddleValues[digits[length/2]] = addValueToArray(foundedMiddleValues[digits[length/2]], number, foundedMiddleValues[digits[length/2]].length);
         }
 
+        // Sort all smaller arrays by its length
+        for (int i = 0; i < foundedMiddleValues.length; i++) {
+            int pos;
+            int[] temp;
+            for (int k = 0; k < foundedMiddleValues.length; k++)
+            {
+                pos = k;
+                for (int j = k+1; j < foundedMiddleValues.length; j++) {
+                    //find the index of the minimum element
+                    if (foundedMiddleValues[i].length < foundedMiddleValues[pos].length)
+                    {
+                        pos = j;
+                    }
+                }
+
+                //swap the current element with the minimum element
+                temp = foundedMiddleValues[pos];
+                foundedMiddleValues[pos] = foundedMiddleValues[i];
+                foundedMiddleValues[i] = temp;
+            }
+        }
 
         // Get all sets whose occurrence is more than 1
         int[] index = new int[0];
@@ -193,16 +220,39 @@ public class KingPalindromeList {
             int lengthOfLongestPalindrome = getLengthOfNumber(longestPalindrome);
             int[] digitsOfLongestPalindrome = getDigitsOfNumber(longestPalindrome, lengthOfLongestPalindrome);
             for (int k = 1; k < foundedMiddleValues[i].length - 1; k++) {
-                int lengthOfNumber = getLengthOfNumber(foundedMiddleValues[i][k + 1]);
+                int lengthOfNumber = getLengthOfNumber(foundedMiddleValues[i][k]);
 
                 if (foundedMiddleValues[i][k] != derivePalindrome(digitsOfLongestPalindrome, lengthOfLongestPalindrome - lengthOfNumber)) {
-                    // Remove this value
-                } else {
-                    // Keep it
+                    foundedMiddleValues[i] = removeElement(foundedMiddleValues[i], k);
                 }
-
             }
         }
+
+        // Get all the longest arrays
+        // Convert this to a while loop
+        int longestArrayLength = foundedMiddleValues[0].length;
+        int[] longestIndices = new int[0];
+        for (int i = 0; i < foundedMiddleValues.length; i++) {
+            if (foundedMiddleValues[i].length == longestArrayLength) {
+                longestIndices = addValueToArray(longestIndices, i, longestIndices.length);
+            } else if (foundedMiddleValues[i].length != longestArrayLength) {
+                break;
+            }
+        }
+
+        // Check which set has the greatest palindrome
+        int greatestIndex = 0;
+        int greatestPalindrome = 0;
+        for (int i = 0; i < longestIndices.length - 1; i++) {
+            if (foundedMiddleValues[longestIndices[i]][foundedMiddleValues[longestIndices[i]].length - 1] > greatestPalindrome) {
+                greatestIndex = i;
+                greatestPalindrome = foundedMiddleValues[i][foundedMiddleValues[i].length - 1];
+            }
+        }
+
+        // Output the largest magical set
+        System.out.println(foundedMiddleValues[greatestIndex].length);
+
     }
 
     /**
@@ -229,10 +279,14 @@ public class KingPalindromeList {
                     System.out.print(number + " ");
                 }
                 System.out.println();
+                break;
             case 2:
                 task2(palindromeList);
+                break;
             case 3:
                 task3(palindromeList);
+                break;
+
         }
     }
 
