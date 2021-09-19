@@ -1,5 +1,4 @@
 package com.company.Week2;
-
 import java.util.Scanner;
 
 /**
@@ -9,8 +8,10 @@ import java.util.Scanner;
  */
 
 public class KingPalindromeList {
-
-    public static long reconstructNumber(long[] digits, long length) {
+    /**
+     * This method will assemble the number from an array of digits
+     */
+    public static long assemble(long[] digits, long length) {
         long number = 0;
         for (int i = 0; i < digits.length; i++) {
             number += digits[i] * length;
@@ -21,7 +22,10 @@ public class KingPalindromeList {
         return number;
     }
 
-    public int getLengthOfNumber(long a) {
+    /**
+     * This method will return the number of digits of the provided number
+     */
+    public int getLength(long a) {
         int length = 0;
         while (a > 0) {
             a = a/10;
@@ -30,7 +34,10 @@ public class KingPalindromeList {
         return length;
     }
 
-    public long[] getDigitsOfNumber(long number, int length) {
+    /**
+     * This method will return an array of digits of the provided number
+     */
+    public long[] getDigits(long number, int length) {
         long[] charInNumber = new long[length];
 
         for (int o = 0; o < length; o++) {
@@ -41,21 +48,24 @@ public class KingPalindromeList {
         return charInNumber;
     }
 
-    public static long[] sortAscending(long[] arr) {
-        int pos;
-        long temp;
+    /**
+     * This method will sort the array in ascending order
+     */
+    public static long[] sort(long[] arr) {
+        int pos; // To store the index of the minimum element
+        long temp; // A temporary value for value-swapping
         for (int i = 0; i < arr.length; i++)
         {
             pos = i;
             for (int j = i+1; j < arr.length; j++)
             {
-                if (arr[j] < arr[pos])                  //find the index of the minimum element
+                if (arr[j] < arr[pos])  //find the index of the minimum element
                 {
                     pos = j;
                 }
             }
 
-            temp = arr[pos];            //swap the current element with the minimum element
+            temp = arr[pos]; //swap the current element with the minimum element
             arr[pos] = arr[i];
             arr[i] = temp;
         }
@@ -63,7 +73,10 @@ public class KingPalindromeList {
         return arr;
     }
 
-    public static long derivePalindrome(long[] biggestPalindrome, int lengthDifference) {
+    /**
+     * This method check if another palindrome can be derived from the provided palindrome
+     */
+    public static long derive(long[] biggestPalindrome, int lengthDifference) {
         // Create another array with same length as the element that is being compared
         long[] comparable = new long[biggestPalindrome.length - lengthDifference];
 
@@ -83,10 +96,13 @@ public class KingPalindromeList {
             otherIndex++;
         }
 
-        return reconstructNumber(comparable, (long) Math.pow(10, comparable.length - 1));
+        return assemble(comparable, (long) Math.pow(10, comparable.length - 1));
     }
 
-    public static long[] addValueToArray(long[] a, long element, int length) {
+    /**
+     * This method will add the provided value to the array
+     */
+    public static long[] appendValue(long[] a, long element, int length) {
         length++;
 
         long[] b = new long[length];
@@ -102,9 +118,9 @@ public class KingPalindromeList {
     }
 
     /**
-     * This method will remove the value at provided index
+     * This method will remove the value from the array at provided index
      */
-    public static long[] removeElement(long[] arr, int index) {
+    public static long[] removeValue(long[] arr, int index) {
         long[] b = new long[arr.length - 1];
 
         int k = 0;
@@ -125,21 +141,27 @@ public class KingPalindromeList {
         int index = 0;
 
         for (long number : palindromeList) {
-            int length = getLengthOfNumber(number); // The number of characters of the current number
-            long[] charInNumber = getDigitsOfNumber(number, length); // The array to store digits of the current number
+            int length = getLength(number); // The number of characters of the current number
+            long[] charInNumber = getDigits(number, length); // The array to store digits of the current number
 
             if (charInNumber.length % 2 != 0) {
-                long[] rightHandDigits = new long[0];
-                long[] leftHandDigits = new long[0];
+                long[] rightHandDigits = new long[0]; // Store all digits in the right-hand side
+                long[] leftHandDigits = new long[0]; // Store all digits in the right-hand side
 
                 // Get right-hand and left-hand side digits
-                for (int i = 0; i < charInNumber.length/2; i++) {
-                    leftHandDigits = addValueToArray(leftHandDigits, charInNumber[charInNumber.length / 2 + (i + 1)], leftHandDigits.length);
-                    rightHandDigits = addValueToArray(rightHandDigits, charInNumber[charInNumber.length / 2 - (i + 1)], rightHandDigits.length);
+                for (int i = 0; i < charInNumber.length / 2; i++) {
+                    int leftHandIndex = charInNumber.length / 2 + (i + 1); // Store the index of the digit to add
+                    int rightHandIndex = charInNumber.length / 2 - (i + 1); // Store the index of the digit to add
+
+                    int rightLength = rightHandDigits.length; // Current number of right-hand digits
+                    int leftLength = leftHandDigits.length; // Current number of left-hand digits
+
+                    leftHandDigits = appendValue(leftHandDigits, charInNumber[leftHandIndex], leftLength);
+                    rightHandDigits = appendValue(rightHandDigits, charInNumber[rightHandIndex], rightLength);
                 }
 
-                long leftHandNumber = reconstructNumber(leftHandDigits, (long) Math.pow(10, leftHandDigits.length - 1));
-                long rightHandNumber = reconstructNumber(rightHandDigits, (long) Math.pow(10, rightHandDigits.length - 1));
+                long leftHandNumber = assemble(leftHandDigits, (long) Math.pow(10, leftHandDigits.length - 1));
+                long rightHandNumber = assemble(rightHandDigits, (long) Math.pow(10, rightHandDigits.length - 1));
 
                 // Compare the left and the right-hand side of the number
                 if (rightHandNumber > leftHandNumber) {
@@ -162,7 +184,7 @@ public class KingPalindromeList {
 
                 // Reconstruct the array
                 long coefficient = (long) Math.pow(10, length-1);
-                palindromeList[index] = reconstructNumber(charInNumber, coefficient);
+                palindromeList[index] = assemble(charInNumber, coefficient);
                 index++;
 
             }
@@ -175,72 +197,76 @@ public class KingPalindromeList {
      * This method will perform task 2 of the assignment
      */
     public long[] task2(long[] list){
-        // Get correct list
+        // Get the correct list
         list = task1(list);
-        list = sortAscending(list);
 
-        long[][] foundedMiddleValues = new long[10][0];
+        // Sort the correct list
+        list = sort(list);
+
+        // An 2D array to store numbers who share the same middle digit together
+        long[][] commonMidDigit = new long[10][0];
 
         // Break down all numbers to get the middle number that occur the most
         for (long number : list) {
-            int length = getLengthOfNumber(number);
-            long[] digits = getDigitsOfNumber(number, length);
+            int length = getLength(number); // Store the number of digits of the current number
+            long[] digits = getDigits(number, length); // Store the array of digits of the current number
+            int middleValue = (int) digits[length/2]; // Get the middle value of the current number
+            int currentLength = commonMidDigit[(int) digits[length/2]].length; // Get the length of the current group
 
-            foundedMiddleValues[(int) digits[length/2]] = addValueToArray(foundedMiddleValues[(int) digits[length/2]], number, foundedMiddleValues[(int) digits[length/2]].length);
+            commonMidDigit[middleValue] = appendValue(commonMidDigit[middleValue], number, currentLength);
         }
 
-        // Sort all smaller arrays by its length
-        for (int i = 0; i < foundedMiddleValues.length; i++) {
-            int pos;
-            long[] temp;
-            for (int k = 0; k < foundedMiddleValues.length; k++)
-            {
+        // Sort array of arrays of numbers that share the same middle digit by its length
+        for (int i = 0; i < commonMidDigit.length; i++) {
+            int pos; // To store the index of current smallest value
+            long[] temp; // Act as a temporary value for value swapping
+            for (int k = 0; k < commonMidDigit.length; k++) {
                 pos = k;
-                for (int j = k+1; j < foundedMiddleValues.length; j++) {
+                for (int j = k+1; j < commonMidDigit.length; j++) {
                     //find the index of the minimum element
-                    if (foundedMiddleValues[i].length < foundedMiddleValues[pos].length)
-                    {
+                    if (commonMidDigit[i].length < commonMidDigit[pos].length) {
                         pos = j;
                     }
                 }
 
                 //swap the current element with the minimum element
-                temp = foundedMiddleValues[pos];
-                foundedMiddleValues[pos] = foundedMiddleValues[i];
-                foundedMiddleValues[i] = temp;
+                temp = commonMidDigit[pos];
+                commonMidDigit[pos] = commonMidDigit[i];
+                commonMidDigit[i] = temp;
             }
         }
 
+        long[] index = new long[0]; // Store all arrays of same middle digits whose length is greater than 2
+
         // Get all sets whose occurrence is more than 2
-        long[] index = new long[0];
-        for (int i = 0; i < foundedMiddleValues.length; i++) {
-            if (foundedMiddleValues[i].length > 1) {
-                index = addValueToArray(index, i, index.length);
+        for (int i = 0; i < commonMidDigit.length; i++) {
+            if (commonMidDigit[i].length > 1) {
+                index = appendValue(index, i, index.length);
             }
         }
 
         // Check if the set is magical
         for (long i : index) {
-            long longestPalindrome = foundedMiddleValues[(int) i][foundedMiddleValues[(int) i].length - 1];
-            int lengthOfLongestPalindrome = getLengthOfNumber(longestPalindrome);
-            long[] digitsOfLongestPalindrome = getDigitsOfNumber(longestPalindrome, lengthOfLongestPalindrome);
-            for (int k = 1; k < foundedMiddleValues[(int) i].length - 1; k++) {
-                int lengthOfNumber = getLengthOfNumber(foundedMiddleValues[(int) i][k]);
+            int maxValueIndex = commonMidDigit[(int) i].length - 1; // Store the index of the max value
+            long maxValue = commonMidDigit[(int) i][maxValueIndex]; // Store the max value
+            int maxValueLength = getLength(maxValue); // Store the number of digits of the max value
+            long[] maxValueDigits = getDigits(maxValue, maxValueLength); // Store the array of digits of the max value
+            for (int k = 1; k < commonMidDigit[(int) i].length - 1; k++) {
+                int numberLength = getLength(commonMidDigit[(int) i][k]); // Store the length of the current number
 
-                if (foundedMiddleValues[(int) i][k] != derivePalindrome(digitsOfLongestPalindrome, lengthOfLongestPalindrome - lengthOfNumber)) {
-                    foundedMiddleValues[(int) i] = removeElement(foundedMiddleValues[(int) i], k);
+                if (commonMidDigit[(int) i][k] != derive(maxValueDigits, maxValueLength - numberLength)) {
+                    commonMidDigit[(int) i] = removeValue(commonMidDigit[(int) i], k);
                 }
             }
         }
 
-        // Get all the longest arrays
         // Convert this to a while loop
-        int longestArrayLength = foundedMiddleValues[0].length;
+        int longestArrayLength = commonMidDigit[0].length; // Get all the longest arrays
         long[] longestIndices = new long[0];
-        for (int i = 0; i < foundedMiddleValues.length; i++) {
-            if (foundedMiddleValues[i].length == longestArrayLength) {
-                longestIndices = addValueToArray(longestIndices, i, longestIndices.length);
-            } else if (foundedMiddleValues[i].length != longestArrayLength) {
+        for (int i = 0; i < commonMidDigit.length; i++) {
+            if (commonMidDigit[i].length == longestArrayLength) {
+                longestIndices = appendValue(longestIndices, i, longestIndices.length);
+            } else if (commonMidDigit[i].length != longestArrayLength) {
                 break;
             }
         }
@@ -249,13 +275,16 @@ public class KingPalindromeList {
         int greatestIndex = 0;
         long greatestPalindrome = 0;
         for (int i = 0; i < longestIndices.length - 1; i++) {
-            if (foundedMiddleValues[(int) longestIndices[i]][foundedMiddleValues[(int) longestIndices[i]].length - 1] > greatestPalindrome) {
+            int finalIndex = commonMidDigit[(int) longestIndices[i]].length - 1; // Get the final index of the array
+            int currentMidDigit = (int) longestIndices[i];
+            long currentValue = commonMidDigit[currentMidDigit][finalIndex]; // Get the final number of the array
+            if (currentValue > greatestPalindrome) {
                 greatestIndex = i;
-                greatestPalindrome = foundedMiddleValues[i][foundedMiddleValues[i].length - 1];
+                greatestPalindrome = commonMidDigit[i][commonMidDigit[i].length - 1];
             }
         }
 
-        return foundedMiddleValues[greatestIndex];
+        return commonMidDigit[greatestIndex];
     }
 
     /**
