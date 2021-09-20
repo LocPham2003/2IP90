@@ -11,10 +11,10 @@ public class KingPalindromeList {
     /**
      * This method will assemble the number from an array of digits
      */
-    public static long assemble(long[] digits, long length) {
-        long number = 0;
+    public static long assemble(long[] digits, double length) {
+        long number = 0; // The assembled number
         for (int i = 0; i < digits.length; i++) {
-            number += digits[i] * length;
+            number += digits[i] * (long) length;
             length /= 10;
 
         }
@@ -25,10 +25,10 @@ public class KingPalindromeList {
     /**
      * This method will return the number of digits of the provided number
      */
-    public int getLength(long a) {
-        int length = 0;
-        while (a > 0) {
-            a = a/10;
+    public int getLength(long number) {
+        int length = 0; // Length of the provided number
+        while (number > 0) {
+            number = number/10;
             length++;
         }
         return length;
@@ -38,7 +38,7 @@ public class KingPalindromeList {
      * This method will return an array of digits of the provided number
      */
     public long[] getDigits(long number, int length) {
-        long[] charInNumber = new long[length];
+        long[] charInNumber = new long[length]; // Store the digits of the number
 
         for (int o = 0; o < length; o++) {
             charInNumber[o] = number % 10;
@@ -76,27 +76,27 @@ public class KingPalindromeList {
     /**
      * This method check if another palindrome can be derived from the provided palindrome
      */
-    public static long derive(long[] biggestPalindrome, int lengthDifference) {
+    public static long derive(long[] maxValue, int lengthDifference) {
         // Create another array with same length as the element that is being compared
-        long[] comparable = new long[biggestPalindrome.length - lengthDifference];
+        long[] comparable = new long[maxValue.length - lengthDifference]; // Digits of the derived number
 
         // Check if a palindrome can be derived from the biggest palindrome
         for (int i = 0; i < lengthDifference/2; i++) {
-            biggestPalindrome[i] = -1;
-            biggestPalindrome[biggestPalindrome.length - (i + 1)] = -1;
+            maxValue[i] = -1;
+            maxValue[maxValue.length - (i + 1)] = -1;
         }
 
-        int index = 0;
-        int otherIndex = 0;
+        int index = 0; // Index of the derived number
+        int otherIndex = 0; // Index of the palindrome
         while (index < comparable.length) {
-            if (biggestPalindrome[otherIndex] != -1) {
-                comparable[index] = biggestPalindrome[otherIndex];
+            if (maxValue[otherIndex] != -1) {
+                comparable[index] = maxValue[otherIndex];
                 index++;
             }
             otherIndex++;
         }
 
-        return assemble(comparable, (long) Math.pow(10, comparable.length - 1));
+        return assemble(comparable, Math.pow(10, comparable.length - 1));
     }
 
     /**
@@ -121,9 +121,9 @@ public class KingPalindromeList {
      * This method will remove the value from the array at provided index
      */
     public static long[] removeValue(long[] arr, int index) {
-        long[] b = new long[arr.length - 1];
+        long[] b = new long[arr.length - 1]; // New array tht doesn't store the provided value
 
-        int k = 0;
+        int k = 0; // The current index of array b
         for (int i = 0;  i < arr.length; i++) {
             if (i != index) {
                 b[k] = arr[i];
@@ -138,33 +138,36 @@ public class KingPalindromeList {
      * This method will perform task 1 of the assignment
      */
     public long[] task1(long[] palindromeList){
-        int index = 0;
+        int index = 0; // Current index of the provided palindrome list
 
         for (long number : palindromeList) {
             int length = getLength(number); // The number of characters of the current number
             long[] charInNumber = getDigits(number, length); // The array to store digits of the current number
 
-            if (charInNumber.length % 2 != 0) {
-                long[] rightHandDigits = new long[0]; // Store all digits in the right-hand side
-                long[] leftHandDigits = new long[0]; // Store all digits in the right-hand side
+            long[] rightHandDigits = new long[0]; // Store all digits in the right-hand side
+            long[] leftHandDigits = new long[0]; // Store all digits in the right-hand side
 
+            int rightLength = 0; // Current number of right-hand digits
+            int leftLength = 0; // Current number of left-hand digits
+
+            if (length % 2 != 0) {
                 // Get right-hand and left-hand side digits
                 for (int i = 0; i < charInNumber.length / 2; i++) {
                     int leftHandIndex = charInNumber.length / 2 + (i + 1); // Store the index of the digit to add
                     int rightHandIndex = charInNumber.length / 2 - (i + 1); // Store the index of the digit to add
 
-                    int rightLength = rightHandDigits.length; // Current number of right-hand digits
-                    int leftLength = leftHandDigits.length; // Current number of left-hand digits
-
                     leftHandDigits = appendValue(leftHandDigits, charInNumber[leftHandIndex], leftLength);
                     rightHandDigits = appendValue(rightHandDigits, charInNumber[rightHandIndex], rightLength);
+
+                    rightLength = rightHandDigits.length;
+                    leftLength = leftHandDigits.length;
                 }
 
-                long leftHandNumber = assemble(leftHandDigits, (long) Math.pow(10, leftHandDigits.length - 1));
-                long rightHandNumber = assemble(rightHandDigits, (long) Math.pow(10, rightHandDigits.length - 1));
+                long leftNumber = assemble(leftHandDigits, Math.pow(10, leftLength - 1)); // Construct left number
+                long rightNumber = assemble(rightHandDigits, Math.pow(10, rightLength - 1)); // Construct right number
 
                 // Compare the left and the right-hand side of the number
-                if (rightHandNumber > leftHandNumber) {
+                if (rightNumber > leftNumber) {
                     charInNumber[charInNumber.length / 2]++;
 
                     if (charInNumber[charInNumber.length / 2] == 10) {
@@ -182,11 +185,11 @@ public class KingPalindromeList {
                     charInNumber[charInNumber.length - (i + 1)] = leftHandDigits[(leftHandDigits.length - 1) - i];
                 }
 
-                // Reconstruct the array
-                long coefficient = (long) Math.pow(10, length-1);
+                long coefficient = (long) Math.pow(10, length - 1); // The number of 0s that the number has
                 palindromeList[index] = assemble(charInNumber, coefficient);
                 index++;
-
+            } else {
+                palindromeList = removeValue(palindromeList, index);
             }
         }
 
@@ -203,8 +206,7 @@ public class KingPalindromeList {
         // Sort the correct list
         list = sort(list);
 
-        // An 2D array to store numbers who share the same middle digit together
-        long[][] commonMidDigit = new long[10][0];
+        long[][] commonMidDigit = new long[10][0]; // An array to store numbers who share the same middle digit
 
         // Break down all numbers to get the middle number that occur the most
         for (long number : list) {
@@ -245,7 +247,7 @@ public class KingPalindromeList {
             }
         }
 
-        // Check if the set is magical
+        // Check if the set is magical and remove un-magical value from set
         for (long i : index) {
             int maxValueIndex = commonMidDigit[(int) i].length - 1; // Store the index of the max value
             long maxValue = commonMidDigit[(int) i][maxValueIndex]; // Store the max value
@@ -315,7 +317,9 @@ public class KingPalindromeList {
         long[] palindromeList = new long[length]; // The array to store the elements of the King Advisor's list
 
         for (int i = 0; i < length; i++){
-            palindromeList[i] = input.nextLong();
+            long value = input.nextLong(); // Get the input of user
+            palindromeList[i] = value;
+
         }
 
         switch (choice) {
