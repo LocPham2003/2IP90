@@ -12,8 +12,10 @@ public class Part1 extends Parts {
     // Strings to construct the search command
     private String[] location = {"hills", "marshes", "caves", "woods"};
     private String[] direction = {"North", "East", "West", "South", "South-East",  "South-West", "North-East",  "North-West"};
+    private String[] humans = {"humans","human males","human females","human children","mutated humans"};
     private String selectedLocation;
     private String selectedDirection;
+    private String selectedHuman;
 
     private boolean isDirection = false;
     // The command after being decrypted
@@ -74,15 +76,22 @@ public class Part1 extends Parts {
                 } else {
                     isDirection = true;
                     selectedDirection = direction[command - 1];
+                    fullCommand.append(selectedDirection).append(" ");
                 }
                 break;
             case 3:
                 if (!isDirection) {
                     quantity = Integer.toString(command);
                 } else {
-                    
+                    selectedHuman = humans[command - 1];
+                    fullCommand.append("and look for ").append(selectedHuman).append(" ");
                 }
-
+            case 4:
+                selectedLocation = location[command - 1];
+                fullCommand.append(selectedLocation).append(" ");
+            case 5:
+                selectedHuman = humans[command - 1];
+                fullCommand.append("and look for ").append(selectedHuman).append(" ");
         }
     }
 
