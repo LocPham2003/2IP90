@@ -9,39 +9,35 @@ import java.util.Scanner;
  */
 
 public class ApeIntelligence {
+    public static int getUserInput(int i, int index) {
+        if (i == -1) {
+            return -1;
+        }
+        Parts parts = new Parts();
+        if (index == 0) {
+            switch (i) {
+                case 1:
+                    parts = new Part1();
+                    break;
+                case 2:
+                    parts = new Part2();
+                    break;
+                case 3:
+                    parts = new Part3();
+                    break;
+            }
 
-    public static int disassembleArray(int length, String[] arr) {
-        if (length == arr.length) {
-            return arr.length;
+            parts.getCommand(i, index);
+
         }
 
-        System.out.println(arr[length]);
-
-        return length + disassembleArray(length + 1, arr);
-    }
-
-    public static void part1(String command) {
-        String[] arr = command.split(" ");
-        disassembleArray(0, arr);
-    }
-
-    public static void part2(String command) {
-
-    }
-
-    public static void part3(String command) {
-
+        return getUserInput(new Scanner(System.in).nextInt(), index++);
     }
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        String part = input.nextLine();
-        String command = input.nextLine();
 
-        switch (part) {
-            case "Part 1" -> part1(command);
-            case "Part 2" -> part2(command);
-            case "Part 3" -> part3(command);
-        }
+        getUserInput(input.nextInt(), 0);
+
     }
 }
