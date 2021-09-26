@@ -70,6 +70,9 @@ class Part1 extends Parts {
                 action = "Retreat to";
                 this.retreat(command, index);
                 break;
+            default:
+                action = "...";
+                break;
         }
 
         if (index == 0) {
@@ -78,7 +81,6 @@ class Part1 extends Parts {
     }
 
     private void attack(String command, int commandIndex) {
-        if (!isInvalidCommand) {
             switch (commandIndex) {
                 case 1:
                     if (Objects.equals(command, "0")) {
@@ -93,8 +95,6 @@ class Part1 extends Parts {
                     fullCommand.append(selectedObject);
                     break;
             }
-        }
-
     }
 
     private void search(String command, int index) {
@@ -105,24 +105,24 @@ class Part1 extends Parts {
                     } else {
                         isDirection = true;
                         selectedDirection = getValidCommand(Integer.parseInt(command) - 1, directions);
-                        fullCommand.append(selectedDirection).append(" ");
+                        fullCommand.append(" ").append(selectedDirection);
                     }
                     break;
                 case 2:
                     if (!isDirection) {
-                        quantity = command + " ";
+                        quantity = " " + command + " ";
                     } else {
                         selectedHuman = getValidCommand(Integer.parseInt(command), humans);
-                        fullCommand.append("and look for ").append(selectedHuman).append(" ");
+                        fullCommand.append(" and look for ").append(selectedHuman).append(" ");
                     }
                     break;
                 case 3:
                     selectedSearchingAreas = getValidCommand(Integer.parseInt(command), searchingAreas);
-                    fullCommand.append(quantity).append(selectedSearchingAreas).append(" ");
+                    fullCommand.append(quantity).append(selectedSearchingAreas);
                     break;
                 case 4:
                     selectedHuman = getValidCommand(Integer.parseInt(command), humans);
-                    fullCommand.append("and look for ").append(selectedHuman);
+                    fullCommand.append(" and look for ").append(selectedHuman);
                     break;
             }
 
@@ -132,7 +132,7 @@ class Part1 extends Parts {
             switch (index) {
                 case 1:
                     selectedRetreatingLocation = getValidCommand(Integer.parseInt(command), retreatingLocations);
-                    fullCommand.append(selectedRetreatingLocation).append(" and move ");
+                    fullCommand.append(" ").append(selectedRetreatingLocation).append(" and move ");
                     break;
                 case 2:
                     if (command.equals("0")) {
@@ -143,7 +143,7 @@ class Part1 extends Parts {
                     fullCommand.append(quantity).append(" ");
                     break;
                 case 3:
-                    selectedObject = getValidCommand(Integer.parseInt(command), objects);
+                    selectedObject = getValidCommand(Integer.parseInt(command) - 1, objects);
                     fullCommand.append(selectedObject).append(" to ");
                     break;
                 case 4:
@@ -173,18 +173,21 @@ class Part2 extends Parts {
             objectInContainer = true;
             isObjectCreated = false;
             consecutiveObject = false;
+            isSpecification = true;
             numberOfObjects = 0;
         } else if (command.equals("4")) {
             if (!objectInContainer) {
                 isObjectCreated = false;
             }
             numberOfObjects++;
-
+            isSpecification = true;
             if (numberOfObjects == 2) {
                 containerEnd = true;
             }
 
             consecutiveObject = false;
+        } else {
+            isSpecification = false;
         }
 
         // If there exist an object right after the previous object
@@ -214,7 +217,7 @@ class Part2 extends Parts {
             isObjectCreated = false;
         }
 
-        if (!isObjectCreated) {
+        if (!isObjectCreated && !isSpecification) {
             fullCommand.append(createObject(command));
         }
     }
@@ -224,11 +227,10 @@ class Part2 extends Parts {
 
         if (isMaterial) {
             String chosenMaterial = getValidCommand(Integer.parseInt(command), materials);
-            if (isValidObject) {
-                object.append("a ").append(chosenMaterial).append(" ");
-                isMaterial = false;
-            }
-            isValidObject = true;
+
+            object.append("a ").append(chosenMaterial).append(" ");
+
+            isMaterial = false;
         } else {
             object.append(getValidCommand(Integer.parseInt(command), item));
             isMaterial = true;
@@ -244,7 +246,6 @@ class Part3 extends Parts {
 }
 
 class Parts {
-    String chosenPart = "";
     String commandType = "";
     String[] objects = {"orangutans", "chimps", "gorillas", "mounted chimps", "mounted orangutans"};
     boolean isInvalidCommand = false;
@@ -265,8 +266,8 @@ class Parts {
     String selectedHuman;
     String selectedRetreatingLocation;
 
-    boolean isValidObject = true;
     boolean isMaterial = true;
+    boolean isSpecification = false;
     boolean isObjectCreated = false;
     boolean isDirection = false;
     boolean isFirstObj = true;
@@ -287,12 +288,11 @@ class Parts {
     }
 
     public String getValidCommand(int index, String[] arr) {
-        String selectedString = "";
+        String selectedString;
         try {
            selectedString = arr[index];
         } catch (IndexOutOfBoundsException e) {
             selectedString = "...";
-            isValidObject = false;
         }
         return selectedString;
     }
