@@ -10,28 +10,22 @@ import java.util.Scanner;
  */
 
 public class ApeIntelligence {
-    static Scanner parsedEncodedCommand;
-    public static int getUserInput(String i, int index, Parts chosenPart) {
+    static Scanner userInput = new Scanner(System.in);
+
+    public static int getUserInput(String i, Parts chosenPart) {
         if (Objects.equals(i, "-1")) {
-            System.out.println(chosenPart.getDecodedCommand());
+            System.out.println(chosenPart.getDecodedCommand().trim());
             return -1;
         }
 
-        chosenPart.getCommand(i, index);
+        chosenPart.getCommand(i);
 
-        index++;
-
-        return getUserInput(parsedEncodedCommand.next(), index, chosenPart);
+        return getUserInput(userInput.next(), chosenPart);
     }
     public static void main(String[] args) {
-        Scanner userInput = new Scanner(System.in);
         Parts selectedPart = new Parts();
-        String selectedPartString = userInput.nextLine();
-        String encodedCommand = userInput.nextLine();
 
-        parsedEncodedCommand = new Scanner(encodedCommand);
-
-        switch (selectedPartString) {
+        switch (userInput.nextLine()) {
             case "Part 1":
                 selectedPart = new Part1();
                 break;
@@ -43,7 +37,7 @@ public class ApeIntelligence {
                 break;
         }
 
-        getUserInput(parsedEncodedCommand.next(), 0, selectedPart);
+        getUserInput(userInput.next(), selectedPart);
 
     }
 }
@@ -52,104 +46,111 @@ class Part1 extends Parts {
     @Override
     // Command is what we need to translate to
     // Index is just the order of the command in the decrypted message
-    public void getCommand(String command, int index) {
-        if (index == 0) {
+    public void getCommand(String command) {
+        if (isChoosingCommand) {
             commandType = command;
         }
 
         switch (commandType) {
             case "0":
                 action = "Attack";
-                this.attack(command, index);
+                this.attack(command);
                 break;
             case "1":
                 action = "Search";
-                this.search(command, index);
+                this.search(command);
                 break;
             case "2":
                 action = "Retreat to";
-                this.retreat(command, index);
+                this.retreat(command);
                 break;
             default:
                 action = "...";
+                if (isChoosingCommand) {
+                    fullCommand.append(action);
+                }
+                isChoosingCommand = false;
                 break;
         }
 
-        if (index == 0) {
+    }
+
+    private void attack(String command) {
+        if (!isChoosingCommand){
+            if (isGettingQuantity) {
+                if (Objects.equals(command, "0")) {
+                    quantity = " with all your ";
+                } else {
+                    quantity = " " + command;
+                }
+                fullCommand.append(quantity);
+                isGettingQuantity = false;
+            } else if (isGettingObject) {
+                selectedObject = objects[Integer.parseInt(command) - 1];
+                fullCommand.append(selectedObject);
+                isGettingObject = false;
+            }
+        } else {
             fullCommand.append(action);
+            isChoosingCommand = false;
         }
-    }
-
-    private void attack(String command, int commandIndex) {
-            switch (commandIndex) {
-                case 1:
-                    if (Objects.equals(command, "0")) {
-                        quantity = " with all your ";
-                    } else {
-                        quantity = " " + command;
-                    }
-                    fullCommand.append(quantity);
-                    break;
-                case 2:
-                    selectedObject = objects[Integer.parseInt(command) - 1];
-                    fullCommand.append(selectedObject);
-                    break;
-            }
-    }
-
-    private void search(String command, int index) {
-            switch (index) {
-                case 1:
-                    if (command.equals("0")) {
-                        isDirection = false;
-                    } else {
-                        isDirection = true;
-                        selectedDirection = getValidCommand(Integer.parseInt(command) - 1, directions);
-                        fullCommand.append(" ").append(selectedDirection);
-                    }
-                    break;
-                case 2:
-                    if (!isDirection) {
-                        quantity = " " + command + " ";
-                    } else {
-                        selectedHuman = getValidCommand(Integer.parseInt(command), humans);
-                        fullCommand.append(" and look for ").append(selectedHuman).append(" ");
-                    }
-                    break;
-                case 3:
-                    selectedSearchingAreas = getValidCommand(Integer.parseInt(command), searchingAreas);
-                    fullCommand.append(quantity).append(selectedSearchingAreas);
-                    break;
-                case 4:
-                    selectedHuman = getValidCommand(Integer.parseInt(command), humans);
-                    fullCommand.append(" and look for ").append(selectedHuman);
-                    break;
-            }
 
     }
 
-    private void retreat(String command, int index) {
-            switch (index) {
-                case 1:
-                    selectedRetreatingLocation = getValidCommand(Integer.parseInt(command), retreatingLocations);
-                    fullCommand.append(" ").append(selectedRetreatingLocation).append(" and move ");
-                    break;
-                case 2:
-                    if (command.equals("0")) {
-                        quantity = " all ";
-                    } else {
-                        quantity = command;
-                    }
-                    fullCommand.append(quantity).append(" ");
-                    break;
-                case 3:
-                    selectedObject = getValidCommand(Integer.parseInt(command) - 1, objects);
-                    fullCommand.append(selectedObject).append(" to ");
-                    break;
-                case 4:
-                    selectedDirection = getValidCommand(Integer.parseInt(command) - 1, directions);
+    private void search(String command) {
+        if (!isChoosingCommand) {
+            if (isChoosingSearchOption) {
+                if (command.equals("0")) {
+                    isDirection = false;
+                } else {
+                    selectedDirection = " " + directions[Integer.parseInt(command) - 1];
                     fullCommand.append(selectedDirection);
-                    break;
+                }
+                isChoosingSearchOption = false;
+            } else if (!isDirection && isGettingQuantity) {
+                 quantity = " " + command;
+                 fullCommand.append(quantity);
+                 isGettingQuantity = false;
+            } else if (!isDirection && isGettingLocation) {
+                selectedSearchingAreas = " " + searchingAreas[Integer.parseInt(command)];
+                fullCommand.append(selectedSearchingAreas);
+                isGettingLocation = false;
+            } else {
+                selectedHuman = " and look for " + humans[Integer.parseInt(command)];
+                fullCommand.append(selectedHuman);
+            }
+        } else {
+            fullCommand.append(action);
+            isChoosingCommand = false;
+        }
+
+    }
+
+    private void retreat(String command) {
+        if (!isChoosingCommand) {
+            if (isGettingRetreatLocation) {
+                selectedRetreatingLocation = " " + getValidCommand(Integer.parseInt(command), retreatingLocations);
+                fullCommand.append(selectedRetreatingLocation).append(" and move");
+                isGettingRetreatLocation = false;
+            } else if (isGettingQuantity) {
+                if (command.equals("0")) {
+                    quantity = " all";
+                } else {
+                    quantity = " " + command;
+                }
+                fullCommand.append(quantity);
+                isGettingQuantity = false;
+            } else if (isGettingObject) {
+                selectedObject = " " + getValidCommand(Integer.parseInt(command) - 1, objects);
+                fullCommand.append(selectedObject).append(" to");
+                isGettingObject = false;
+            } else if (!isDirection) {
+                selectedDirection = " " + getValidCommand(Integer.parseInt(command) - 1, directions);
+                fullCommand.append(selectedDirection);
+            }
+        } else {
+            fullCommand.append(action);
+            isChoosingCommand = false;
         }
     }
 
@@ -166,7 +167,7 @@ class Part2 extends Parts {
     }
 
     @Override
-    public void getCommand(String command, int index) {
+    public void getCommand(String command) {
         if (command.equals("5")) {
             fullCommand.append(" containing ");
             isFirstObj = true;
@@ -177,14 +178,13 @@ class Part2 extends Parts {
             numberOfObjects = 0;
         } else if (command.equals("4")) {
             if (!objectInContainer) {
-                isObjectCreated = false;
+                numberOfObjects++;
             }
             numberOfObjects++;
             isSpecification = true;
             if (numberOfObjects == 2) {
                 containerEnd = true;
             }
-
             consecutiveObject = false;
         } else {
             isSpecification = false;
@@ -217,7 +217,7 @@ class Part2 extends Parts {
             isObjectCreated = false;
         }
 
-        if (!isObjectCreated && !isSpecification) {
+        if (!isObjectCreated && !isSpecification && !containerEnd) {
             fullCommand.append(createObject(command));
         }
     }
@@ -242,13 +242,18 @@ class Part2 extends Parts {
 }
 
 class Part3 extends Parts {
-
+    
 }
 
 class Parts {
     String commandType = "";
     String[] objects = {"orangutans", "chimps", "gorillas", "mounted chimps", "mounted orangutans"};
-    boolean isInvalidCommand = false;
+
+    // Boolean indication for Attach
+    boolean isChoosingCommand = true;
+    boolean isGettingQuantity = true;
+    boolean isGettingObject = true;
+
     // Strings to construct attack command
     String action = "";
     String selectedObject = "";
@@ -266,6 +271,13 @@ class Parts {
     String selectedHuman;
     String selectedRetreatingLocation;
 
+    // Boolean to construct search command
+    boolean isChoosingSearchOption = true;
+    boolean isGettingLocation = true;
+
+    // Boolean to construct retreat command
+    boolean isGettingRetreatLocation = true;
+
     boolean isMaterial = true;
     boolean isSpecification = false;
     boolean isObjectCreated = false;
@@ -279,7 +291,7 @@ class Parts {
 
     StringBuilder fullCommand = new StringBuilder();
 
-    public void getCommand(String command, int index) {
+    public void getCommand(String command) {
 
     }
 
@@ -290,13 +302,10 @@ class Parts {
     public String getValidCommand(int index, String[] arr) {
         String selectedString;
         try {
-           selectedString = arr[index];
+            selectedString = arr[index];
         } catch (IndexOutOfBoundsException e) {
             selectedString = "...";
         }
         return selectedString;
     }
 }
-
-
-
