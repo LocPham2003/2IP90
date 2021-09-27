@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 public class ApeIntelligence {
     static Scanner userInput = new Scanner(System.in);
+    static String wholeCommand;
 
     public static int getUserInput(String i, Parts chosenPart) {
         if (Objects.equals(i, "-1")) {
@@ -18,14 +19,22 @@ public class ApeIntelligence {
             return -1;
         }
 
+        if (chosenPart.firstIndex.equals("")) {
+            chosenPart.firstIndex = i;
+        }
+
         chosenPart.getCommand(i);
 
         return getUserInput(userInput.next(), chosenPart);
     }
+
     public static void main(String[] args) {
         Parts selectedPart = new Parts();
+        String part = userInput.nextLine();
+        wholeCommand = userInput.nextLine();
+        userInput = new Scanner(wholeCommand);
 
-        switch (userInput.nextLine()) {
+        switch (part) {
             case "Part 1":
                 selectedPart = new Part1();
                 break;
@@ -34,9 +43,10 @@ public class ApeIntelligence {
                 break;
             case "Part 3":
                 selectedPart = new Part3();
+                selectedPart.wholeCommand = wholeCommand.substring(0, wholeCommand.length() - 3);
+                selectedPart.setUpInverseRecursion();
                 break;
         }
-
         getUserInput(userInput.next(), selectedPart);
 
     }
@@ -76,7 +86,7 @@ class Part1 extends Parts {
     }
 
     private void attack(String command) {
-        if (!isChoosingCommand){
+        if (!isChoosingCommand) {
             if (isGettingQuantity) {
                 if (Objects.equals(command, "0")) {
                     quantity = " with all your ";
@@ -108,9 +118,9 @@ class Part1 extends Parts {
                 }
                 isChoosingSearchOption = false;
             } else if (!isDirection && isGettingQuantity) {
-                 quantity = " " + command;
-                 fullCommand.append(quantity);
-                 isGettingQuantity = false;
+                quantity = " " + command;
+                fullCommand.append(quantity);
+                isGettingQuantity = false;
             } else if (!isDirection && isGettingLocation) {
                 selectedSearchingAreas = " " + searchingAreas[Integer.parseInt(command)];
                 fullCommand.append(selectedSearchingAreas);
@@ -241,8 +251,69 @@ class Part2 extends Parts {
     }
 }
 
+
 class Part3 extends Parts {
-    
+    Part3() {
+        fullCommand.append("Build a concrete base");
+    }
+
+    @Override
+    public void setUpInverseRecursion() {
+        StringBuilder reversedCommand = new StringBuilder(wholeCommand);
+        wholeCommand = reversedCommand.reverse().append(" ").toString();
+        checkPaint = new Scanner(wholeCommand);
+        // This to get the paintCount
+        backwardRecursion(checkPaint.next());
+        wholeCommand = wholeCommand.substring(constantPaintCount * 2 + 2) + " ";
+    }
+
+    public int backwardRecursion(String i) {
+        if (i.equals("4")) {
+            getPaintCount = false;
+            return 0;
+        } else {
+            if (getPaintCount) {
+                constantPaintCount++;
+            }
+        }
+
+        if (paintCount > 0 && i.equals(selectedMaterial)) {
+            boxSize = " 1x1x1";
+            return 0;
+        } else {
+            paintCount--;
+        }
+
+        if (paintCount == 0) {
+            return 0;
+        }
+
+        return backwardRecursion(checkPaint.next());
+    }
+
+    @Override
+    public void getCommand(String command) {
+        selectedMaterial = command; // Get the material of the current building block
+        paintCount = constantPaintCount;
+
+        checkPaint = new Scanner(wholeCommand);
+
+        if (command.equals("4") && !getPaintedObject) {
+            getPaintedObject = true;
+        }
+
+        // Get the correct box size, do not run if the program is reading digits after number 4
+        if (!getPaintedObject) {
+            backwardRecursion(checkPaint.next());
+            selectedMaterial = " " + getValidCommand(Integer.parseInt(command), materials);
+            fullCommand.append(" on top of which is a").append(boxSize).append(selectedMaterial).append(" cube");
+        } else {
+            if (!command.equals("4")) {
+                selectedObject = getValidCommand(Integer.parseInt(command) - 1, objects);
+                fullCommand.append(" with ").append(selectedObject).append(" painted on the sides");
+            }
+        }
+    }
 }
 
 class Parts {
@@ -261,11 +332,11 @@ class Parts {
 
     // Strings to construct the search command
     String[] searchingAreas = {"hills", "marshes", "caves", "woods"};
-    String[] directions = {"North", "East", "West", "South", "South-East",  "South-West", "North-East",  "North-West"};
-    String[] retreatingLocations = {"Ape City","Forbidden Zone","Rocky Mountains"};
-    String[] humans = {"humans","human males","human females","human children","mutated humans"};
-    String[] materials = {"wooden","steel","stone","cotton"};
-    String[] item = {"cage","net","helmet","shield"};
+    String[] directions = {"North", "East", "West", "South", "South-East", "South-West", "North-East", "North-West"};
+    String[] retreatingLocations = {"Ape City", "Forbidden Zone", "Rocky Mountains"};
+    String[] humans = {"humans", "human males", "human females", "human children", "mutated humans"};
+    String[] materials = {"wooden", "steel", "stone", "cotton"};
+    String[] item = {"cage", "net", "helmet", "shield"};
     String selectedSearchingAreas;
     String selectedDirection;
     String selectedHuman;
@@ -278,6 +349,8 @@ class Parts {
     // Boolean to construct retreat command
     boolean isGettingRetreatLocation = true;
 
+
+    // Booleans for part 2
     boolean isMaterial = true;
     boolean isSpecification = false;
     boolean isObjectCreated = false;
@@ -286,17 +359,29 @@ class Parts {
     boolean objectInContainer = false;
     boolean containerEnd = false;
     boolean consecutiveObject = true;
-
     int numberOfObjects = 0;
 
+    // Variables for part 3
+    String wholeCommand = "";
+    String firstIndex = "";
+    String boxSize = " 2x2x2";
+    String selectedMaterial;
+    boolean getPaintCount = true;
+    boolean getPaintedObject = false;
+    int constantPaintCount = 0;
+    int paintCount = -1;
+    Scanner checkPaint = new Scanner(wholeCommand);
     StringBuilder fullCommand = new StringBuilder();
 
     public void getCommand(String command) {
-
     }
 
     public String getDecodedCommand() {
         return this.fullCommand.toString();
+    }
+
+    public void setUpInverseRecursion() {
+
     }
 
     public String getValidCommand(int index, String[] arr) {
@@ -308,4 +393,5 @@ class Parts {
         }
         return selectedString;
     }
+
 }
