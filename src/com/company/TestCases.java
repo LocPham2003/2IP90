@@ -6,7 +6,5 @@ public class TestCases {
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        String a = "";
-        System.out.println(a.isEmpty());
     }
 }

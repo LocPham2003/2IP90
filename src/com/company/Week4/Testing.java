@@ -1,8 +1,6 @@
 package com.company.Week4;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class Testing {
     public void testSequence(ArrayList<Integer> nonStopPoints, ArrayList<Integer> fuelCans, ArrayList<Integer> sequence) {
