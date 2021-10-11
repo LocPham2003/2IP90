@@ -1,0 +1,44 @@
+Index: src/com/company/Week4/MadTrucker.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.company.Week4;\r\nimport java.util.*;\r\n\r\npublic class MadTrucker {\r\n    static int sumOfKilometers = 0;\r\n    static ArrayList<Integer> fuelCansInOrder = new ArrayList<>();\r\n    static ArrayList<Integer> mirroredFuelCans;\r\n    static ArrayList<Integer> nonStopPointsInput = new ArrayList<>();\r\n    static int numOfFuelCans;\r\n\r\n\r\n    public static void createCansRefuelOrder(ArrayList<Integer> fuelCans, int target, ArrayList<Integer> subset) {\r\n        int s = sumOfKilometers;\r\n        for (int x : subset) {\r\n            if (!fuelCansInOrder.contains(x)) {;\r\n                fuelCansInOrder.add(x);\r\n                sumOfKilometers = s;\r\n            }\r\n        }\r\n\r\n        for (int i = 0; i < fuelCans.size(); i++) {\r\n            int n = fuelCans.get(i);\r\n            ArrayList<Integer> remaining = new ArrayList<>(fuelCans);\r\n            remaining.remove(0);\r\n            subset.add(n);\r\n\r\n            if (fuelCansInOrder.size() == numOfFuelCans) {\r\n                break;\r\n            }\r\n\r\n            createCansRefuelOrder(remaining, target, subset);\r\n            subset.remove(subset.size() - 1);\r\n        }\r\n    }\r\n\r\n    public static void generateSequence(ArrayList<Integer> fuelCans, int target) {\r\n        createCansRefuelOrder(fuelCans, target, new ArrayList<>());\r\n    }\r\n\r\n\r\n    public static void main(String[] args) {\r\n        Scanner scanner = new Scanner(System.in);\r\n\r\n        ArrayList<Integer> fuelCans = new ArrayList<>();\r\n        ArrayList<String> adventure = new ArrayList<>(Arrays.asList(scanner.nextLine().split(\" \")));\r\n\r\n        adventure.removeIf(i -> i.equals(\"\"));\r\n\r\n        numOfFuelCans = Integer.parseInt(adventure.get(0));\r\n        for (int i = 1; i < numOfFuelCans + 1; i++) {\r\n            fuelCans.add(Integer.parseInt(adventure.get(i)));\r\n        }\r\n\r\n        for (int k = numOfFuelCans + 1; k < adventure.size() - 1; k++) {\r\n            nonStopPointsInput.add(Integer.parseInt(adventure.get(k)));\r\n        }\r\n\r\n        mirroredFuelCans = new ArrayList<>(fuelCans);\r\n        fuelCans.sort(Comparator.naturalOrder());\r\n        nonStopPointsInput.sort(Comparator.naturalOrder());\r\n        int greatestDistance = nonStopPointsInput.get(nonStopPointsInput.size() - 1);\r\n        generateSequence(fuelCans, greatestDistance);\r\n\r\n        for (int i = 0; i < fuelCansInOrder.size(); i++) {\r\n            System.out.print(mirroredFuelCans.indexOf(fuelCansInOrder.get(i)));\r\n            if (i != fuelCansInOrder.size() - 1) {\r\n                System.out.print(\" \");\r\n            }\r\n        }\r\n\r\n        System.out.println();\r\n\r\n\r\n\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/com/company/Week4/MadTrucker.java b/src/com/company/Week4/MadTrucker.java
+--- a/src/com/company/Week4/MadTrucker.java	(revision bf81661f5cf66891097b94a0725fa73e344da095)
++++ b/src/com/company/Week4/MadTrucker.java	(date 1633336725455)
+@@ -8,8 +8,7 @@
+     static ArrayList<Integer> nonStopPointsInput = new ArrayList<>();
+     static int numOfFuelCans;
+ 
+-
+-    public static void createCansRefuelOrder(ArrayList<Integer> fuelCans, int target, ArrayList<Integer> subset) {
++    public static void createCansRefuelOrder(ArrayList<Integer> fuelCans, ArrayList<Integer> subset) {
+         int s = sumOfKilometers;
+         for (int x : subset) {
+             if (!fuelCansInOrder.contains(x)) {;
+@@ -28,13 +27,13 @@
+                 break;
+             }
+ 
+-            createCansRefuelOrder(remaining, target, subset);
++            createCansRefuelOrder(remaining, subset);
+             subset.remove(subset.size() - 1);
+         }
+     }
+ 
+     public static void generateSequence(ArrayList<Integer> fuelCans, int target) {
+-        createCansRefuelOrder(fuelCans, target, new ArrayList<>());
++        createCansRefuelOrder(fuelCans, new ArrayList<>());
+     }
+ 
+ 
+@@ -70,7 +69,5 @@
+ 
+         System.out.println();
+ 
+-
+-
+     }
+ }

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="523096fa-5b36-405e-8f04-02545ae9b650" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="ProjectId" id="1ybPgSn5NVEN0jyzFVGcG9SOY97" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+  </component>
+  <component name="RunManager" selected="Application.MyZoo">
+    <configuration name="GFG" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.company.Week4.GFG" />
+      <module name="2IP90" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.company.Week4.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MadTrucker" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.company.Week4.MadTrucker" />
+      <module name="2IP90" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.company.Week4.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MyZoo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.company.Week5.MyZoo" />
+      <module name="2IP90" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.company.Week5.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ReturnTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.company.ReturnTest" />
+      <module name="2IP90" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.company.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestCases" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.company.TestCases" />
+      <module name="2IP90" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.company.Week4.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.MyZoo" />
+        <item itemvalue="Application.MadTrucker" />
+        <item itemvalue="Application.TestCases" />
+        <item itemvalue="Application.ReturnTest" />
+        <item itemvalue="Application.GFG" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="523096fa-5b36-405e-8f04-02545ae9b650" name="Changes" comment="" />
+      <created>1632517425861</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1632517425861</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Fix input error in part 1&#10;Fix some part 1 bug">
+      <created>1632522538740</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1632522538740</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Stable version of Part 2, still some error if the decoder cannot read the input command">
+      <created>1632660806437</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1632660806437</updated>
+    </task>
+    <task id="LOCAL-00003" summary="With Part 2, score 80/ 110 points on Momotors">
+      <created>1632664294489</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1632664294489</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Stable part 1 and 2 and remove index++ in recursive methods.">
+      <created>1632683494744</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1632683494744</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Add part 3, score 110/110 on Momotor">
+      <created>1632735051184</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1632735051184</updated>
+    </task>
+    <task id="LOCAL-00006" summary="CP3 Assignment, stable version. All outputs are logically correct and satisfy the time-constrains">
+      <created>1633296290985</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1633296290985</updated>
+    </task>
+    <task id="LOCAL-00007" summary="CP4 assignment, zookeeper">
+      <created>1633904019296</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1633904019296</updated>
+    </task>
+    <task id="LOCAL-00008" summary="CP4 assignment, add relocate animal method">
+      <created>1633941206109</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1633941206110</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Fix input error in part 1&#10;Fix some part 1 bug" />
+    <MESSAGE value="Stable version of Part 2, still some error if the decoder cannot read the input command" />
+    <MESSAGE value="With Part 2, score 80/ 110 points on Momotors" />
+    <MESSAGE value="Stable part 1 and 2 and remove index++ in recursive methods." />
+    <MESSAGE value="Add part 3, score 110/110 on Momotor" />
+    <MESSAGE value="CP3 Assignment, stable version. All outputs are logically correct and satisfy the time-constrains" />
+    <MESSAGE value="CP4 assignment, zookeeper" />
+    <MESSAGE value="CP4 assignment, add relocate animal method" />
+    <option name="LAST_COMMIT_MESSAGE" value="CP4 assignment, add relocate animal method" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/2IP90$TestCases.ic" NAME="TestCases Coverage Results" MODIFIED="1633292440162" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.company.Week4.*</FILTER>
+    </SUITE>
+  </component>
+</project>
