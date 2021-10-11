@@ -12,22 +12,22 @@ public class MyZoo extends ZooResource implements Zoo{
     }
 
     @Override
-    public boolean removeAnimal(String animalNickname) {
-        return false;
-    }
-
-    @Override
-    public boolean relocateAnimal(String animalNickname, String homeType, int homeNumber) {
-        return false;
-    }
-
-    @Override
     public boolean feedAnimals(String homeType, int homeNumber, int amountOfFood, String animalFoodType) {
         return checkFeeding(homeType, homeNumber, amountOfFood, animalFoodType);
     }
 
     @Override
     public boolean buyFood(String animalFoodType, int amount) {
+        return purchaseFood(animalFoodType, amount);
+    }
+
+    @Override
+    public boolean relocateAnimal(String animalNickname, String homeType, int homeNumber) {
+        return relocateSpecies(animalNickname, homeType, homeNumber);
+    }
+
+    @Override
+    public boolean removeAnimal(String animalNickname) {
         return false;
     }
 
@@ -59,5 +59,7 @@ public class MyZoo extends ZooResource implements Zoo{
         System.out.println(myZoo.accomodateAnimal("Lion", "Kid", "Enclosure",0));
         System.out.println(myZoo.feedAnimals("Enclosure", 0, 100, "Carrot"));
         System.out.println(myZoo.feedAnimals("Enclosure", 0, 200, "Meat"));
+        System.out.println(myZoo.relocateAnimal("Bagheera", "Enclosure", 1));
+        System.out.println(myZoo.relocateAnimal("Bagheera", "Enclosure", 2));
     }
 }

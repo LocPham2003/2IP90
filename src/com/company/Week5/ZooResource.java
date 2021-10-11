@@ -13,15 +13,24 @@ abstract class ZooResource {
     private HashMap<String, Integer> foodStorage = new HashMap<>();
     private HashMap<String, ArrayList<String>> diet = new HashMap<>();
     private HashMap<String, ArrayList<String>> containerType = new HashMap<>();
+    private HashMap<String, String> animalClass = new HashMap<>();
+
+    private static final int numberOfCages = 20;
+    private static final int numberOfEnclosures = 5;
 
     private static class Container {
         private final ArrayList<Animal> listOfAnimals = new ArrayList<>();
+        private final int maxCapacity;
+
+        public Container(int maxCapacity) {
+            this.maxCapacity = maxCapacity;
+        }
 
         public int getNumberOfTenants() {
             return listOfAnimals.size();
         }
 
-        public ArrayList<Animal> getCurrentAnimal() {
+        public ArrayList<Animal> getResidents() {
             ArrayList<Animal> availableAnimals = new ArrayList<>();
 
             for (Animal i : this.listOfAnimals) {
@@ -31,6 +40,10 @@ abstract class ZooResource {
             }
 
             return availableAnimals;
+        }
+
+        public int getMaxCapacity() {
+            return maxCapacity;
         }
 
         public String outPutDietMessage() {
@@ -53,19 +66,26 @@ abstract class ZooResource {
             return stringBuilder.toString();
         }
 
-        public void addToContainer(String animalSpecies, String animalNickname) {
-            Animal animal = new Animal(animalSpecies, animalNickname);
-            this.listOfAnimals.add(animal);
+        public void modifyContainer(boolean add, Animal animal) {
+            if (add) {
+                this.listOfAnimals.add(animal);
+            } else {
+                int index = listOfAnimals.indexOf(animal);
+                this.listOfAnimals.remove(index);
+            }
         }
     }
 
     private static class Animal {
         private final String animalSpecies;
         private final String animalNickname;
-
-        public Animal(String animalSpecies, String animalNickname) {
+        private int homeNumber;
+        private String homeType;
+        public Animal(String animalSpecies, String animalNickname, String homeType, int homeNumber) {
             this.animalNickname = animalNickname;
             this.animalSpecies = animalSpecies;
+            this.homeNumber = homeNumber;
+            this.homeType = homeType;
         }
 
         public String getAnimalNickname() {
@@ -74,6 +94,14 @@ abstract class ZooResource {
 
         public String getAnimalSpecies() {
             return animalSpecies;
+        }
+
+        public int getHomeNumber() {
+            return homeNumber;
+        }
+
+        public String getHomeType() {
+            return homeType;
         }
     }
 
@@ -95,7 +123,32 @@ abstract class ZooResource {
             listOfCages = selectedListOfContainer;
         }
         selectedListOfContainer = new ArrayList<>();
+    }
 
+    /**
+     * Search all containers in the zoo for the animal with the provided nickname
+     */
+        private Animal searchAnimal(String animalNickname) {
+        Animal animal = new Animal("", "", "", -1);
+        for (int i = 0; i < numberOfCages; i++) {
+            for (int k = 0; k < listOfCages.get(i).getResidents().size(); k++) {
+                if (listOfCages.get(i).getResidents().get(k).getAnimalNickname().equalsIgnoreCase(animalNickname)) {
+                    animal = listOfCages.get(i).getResidents().get(k);
+                    break;
+                }
+            }
+
+            if (i < numberOfEnclosures) {
+                for (int k = 0; k < listOfEnclosures.get(i).getResidents().size(); k++) {
+                    if (listOfEnclosures.get(i).getResidents().get(k).getAnimalNickname().equalsIgnoreCase(animalNickname)) {
+                        animal = listOfEnclosures.get(i).getResidents().get(k);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return animal;
     }
 
     void configureZooResources() {
@@ -123,6 +176,7 @@ abstract class ZooResource {
 
         // Construct food diet of all animals
         for (String i : carnivores) {
+            animalClass.put(i, "carnivores");
             ArrayList<String> diet = new ArrayList<>(Arrays.asList(meat));
 
             if (i.equalsIgnoreCase("bear")) {
@@ -134,6 +188,7 @@ abstract class ZooResource {
 
 
         for (String i : herbivores) {
+            animalClass.put(i, "herbivores");
             ArrayList<String> diet = new ArrayList<>(Arrays.asList(veggies));
 
             if (i.equalsIgnoreCase("wildebeest")) {
@@ -143,12 +198,12 @@ abstract class ZooResource {
             this.diet.put(i, diet);
         }
 
-        for (int i = 0; i < 20; i++) {
-            Container container  = new Container();
+        for (int i = 0; i < numberOfCages; i++) {
+            Container container  = new Container(4);
             listOfCages.add(container);
 
-            if (i < 5) {
-                Container container1 = new Container();
+            if (i < numberOfEnclosures) {
+                Container container1 = new Container(20);
                 listOfEnclosures.add(container1);
             }
 
@@ -156,27 +211,12 @@ abstract class ZooResource {
 
     }
 
-    private boolean doesNameExist(String name, String species) {
-        boolean exist = false;
-        for (Container enclosures : listOfEnclosures) {
-            for (Animal a : enclosures.getCurrentAnimal()) {
-                if (a.getAnimalNickname().equals(name) && a.getAnimalSpecies().equals(species)) {
-                    exist = true;
-                    break;
-                }
-            }
-        }
-
-        return exist;
-    }
-
     boolean accommodateCage(String animalSpecies, String animalNickname, String homeType, int homeNumber) {
         boolean successfulAccommodation = false;
 
         selectedListOfContainer = getSelectedContainer(homeType);
         // Check if the species is put in the right cage
-         if (!doesNameExist(animalNickname, animalSpecies)) {
-             this.animalNames.add(animalNickname);
+         if (!this.animalNames.contains(animalNickname)) {
              // Check if the upcoming animal is being put in the right container
              if (containerType.get(homeType).contains(animalSpecies)) {
 
@@ -187,7 +227,7 @@ abstract class ZooResource {
                          if (numberOfTenants == 4 || numberOfTenants == 20) {
                              System.out.println(homeType + " " + homeNumber + " is already full");
                          } else {
-                             ArrayList<Animal> existingAnimal = selectedListOfContainer.get(homeNumber).getCurrentAnimal();
+                             ArrayList<Animal> existingAnimal = selectedListOfContainer.get(homeNumber).getResidents();
                              boolean canBeShared = true;
 
                              for (Animal i : existingAnimal) {
@@ -200,8 +240,10 @@ abstract class ZooResource {
                              boolean isEmpty = existingAnimal.isEmpty();
                              // Check if the upcoming animal can share the same cage with the current animal
                              if (canBeShared || isEmpty) {
-                                 selectedListOfContainer.get(homeNumber).addToContainer(animalSpecies, animalNickname);
+                                 Animal animal = new Animal(animalSpecies, animalNickname, homeType, homeNumber);
+                                 selectedListOfContainer.get(homeNumber).modifyContainer(true, animal);
                                  successfulAccommodation = true;
+                                 this.animalNames.add(animalNickname);
                              } else {
                                  System.out.println(animalSpecies + " can't live with " + selectedListOfContainer.get(homeNumber).outPutAnimals());
                              }
@@ -214,6 +256,7 @@ abstract class ZooResource {
                  System.out.println(animalSpecies + " doesn't live in " + homeType);
              }
          } else {
+             // Make this output tiger instead of lion
              System.out.println(animalSpecies + " with nickname " + animalNickname + " already lives in our Zoo!");
          }
 
@@ -231,7 +274,7 @@ abstract class ZooResource {
 
             if (foodStorage.get(animalFoodType) >= amountOfFood) {
                 // Check if all animals in container can eat that food
-                ArrayList<Animal> animalsInContainer = container.getCurrentAnimal();
+                ArrayList<Animal> animalsInContainer = container.getResidents();
                 boolean allAreFed = true;
                 for (Animal i : animalsInContainer) {
                     if (!diet.get(i.getAnimalSpecies()).contains(animalFoodType)) {
@@ -248,7 +291,7 @@ abstract class ZooResource {
 
 
             } else {
-                System.out.println("Not enough " + animalFoodType + ", current amount " + foodStorage.get(animalFoodType));
+                System.out.println("Not enough " + animalFoodType + ", current amount = " + foodStorage.get(animalFoodType));
             }
 
         } catch (IndexOutOfBoundsException e) {
@@ -257,4 +300,52 @@ abstract class ZooResource {
 
         return isFed;
      }
+
+     boolean purchaseFood(String animalFoodType, int amount) {
+        boolean hasPurchased = true;
+        if (amount > 0) {
+            int currentAmount = this.foodStorage.get(animalFoodType);
+            this.foodStorage.put(animalFoodType, currentAmount + amount);
+        } else {
+            System.out.println("You cannot buy negative or no amount of food");
+            hasPurchased = false;
+        }
+
+        return hasPurchased;
+     }
+
+     boolean relocateSpecies(String animalNickname, String homeType, int homeNumber) {
+        boolean hasMoved = false;
+
+        Animal movingAnimals = searchAnimal(animalNickname);
+         System.out.println(movingAnimals.getAnimalSpecies());
+        selectedListOfContainer = getSelectedContainer(homeType);
+
+        int maxCap = selectedListOfContainer.get(homeNumber).getMaxCapacity();
+
+        if (maxCap - selectedListOfContainer.get(homeNumber).getNumberOfTenants() >= 1) {
+
+            for (Animal b : selectedListOfContainer.get(homeNumber).getResidents()) {
+                boolean isEmpty = selectedListOfContainer.get(homeNumber).getResidents().isEmpty();
+                boolean canBeShared = containerType.get(keys[2]).contains(b.getAnimalSpecies()) && containerType.get(keys[2]).contains(movingAnimals.getAnimalSpecies());
+                boolean sameClass = animalClass.get(b.getAnimalSpecies()).equals(animalClass.get(movingAnimals.getAnimalSpecies()));
+                if ((canBeShared && sameClass) || isEmpty) {
+                    hasMoved = true;
+                    Animal animal = new Animal(movingAnimals.getAnimalSpecies(), animalNickname, homeType, homeNumber);
+                    selectedListOfContainer.get(homeNumber).modifyContainer(true, animal);
+
+                    ArrayList<Container> previousListOfContainers = getSelectedContainer(movingAnimals.getHomeType());
+                    previousListOfContainers.get(movingAnimals.getHomeNumber()).modifyContainer(false, movingAnimals);
+                }
+            }
+
+        } else {
+            System.out.println(homeType + " " + homeNumber + " is full");
+        }
+
+        updateContainers(homeType);
+
+        return hasMoved;
+     }
+
 }
