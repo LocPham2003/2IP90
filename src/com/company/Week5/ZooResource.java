@@ -128,7 +128,7 @@ abstract class ZooResource {
     /**
      * Search all containers in the zoo for the animal with the provided nickname
      */
-        private Animal searchAnimal(String animalNickname) {
+    private Animal searchAnimal(String animalNickname) {
         Animal animal = new Animal("", "", "", -1);
         for (int i = 0; i < numberOfCages; i++) {
             for (int k = 0; k < listOfCages.get(i).getResidents().size(); k++) {
@@ -192,7 +192,7 @@ abstract class ZooResource {
             ArrayList<String> diet = new ArrayList<>(Arrays.asList(veggies));
 
             if (i.equalsIgnoreCase("wildebeest")) {
-                diet.remove("carrots");
+                diet.remove("Carrot");
             }
 
             this.diet.put(i, diet);
@@ -219,7 +219,6 @@ abstract class ZooResource {
          if (!this.animalNames.contains(animalNickname)) {
              // Check if the upcoming animal is being put in the right container
              if (containerType.get(homeType).contains(animalSpecies)) {
-
                 // Check if the upcoming animal can be put in the selected container
                  try {
                      // Get the existing animal of the current container
@@ -257,7 +256,8 @@ abstract class ZooResource {
              }
          } else {
              // Make this output tiger instead of lion
-             System.out.println(animalSpecies + " with nickname " + animalNickname + " already lives in our Zoo!");
+             Animal animal = searchAnimal(animalNickname);
+             System.out.println(animal.getAnimalSpecies() + " with nickname " + animalNickname + " already lives in our Zoo!");
          }
 
          updateContainers(homeType);
@@ -287,9 +287,6 @@ abstract class ZooResource {
                 } else {
                     System.out.println(container.outPutDietMessage() + "doesn't eat " + animalFoodType);
                 }
-
-
-
             } else {
                 System.out.println("Not enough " + animalFoodType + ", current amount = " + foodStorage.get(animalFoodType));
             }
@@ -318,34 +315,91 @@ abstract class ZooResource {
         boolean hasMoved = false;
 
         Animal movingAnimals = searchAnimal(animalNickname);
-         System.out.println(movingAnimals.getAnimalSpecies());
         selectedListOfContainer = getSelectedContainer(homeType);
 
         int maxCap = selectedListOfContainer.get(homeNumber).getMaxCapacity();
+        int remainingSpots = maxCap - selectedListOfContainer.get(homeNumber).getNumberOfTenants();
 
-        if (maxCap - selectedListOfContainer.get(homeNumber).getNumberOfTenants() >= 1) {
+        if (movingAnimals.getHomeNumber() != -1) {
+            if (remainingSpots > 0) {
+                // in case the container is empty
+                if (remainingSpots == maxCap) {
+                    if (containerType.get(homeType).contains(movingAnimals.getAnimalSpecies())) {
+                        hasMoved = true;
+                    }
+                } else {
+                    // This loop will not run if the current container is empty
+                    for (Animal b : selectedListOfContainer.get(homeNumber).getResidents()) {
+                        boolean isSameContainer = homeNumber == movingAnimals.getHomeNumber() && homeType.equalsIgnoreCase(movingAnimals.getHomeType());
+                        if (isSameContainer) {
+                            hasMoved = true;
+                        } else {
+                            boolean isEmpty = selectedListOfContainer.get(homeNumber).getResidents().isEmpty();
+                            boolean canBeShared = containerType.get(keys[2]).contains(b.getAnimalSpecies()) && containerType.get(keys[2]).contains(movingAnimals.getAnimalSpecies());
+                            boolean sameClass = animalClass.get(b.getAnimalSpecies()).equals(animalClass.get(movingAnimals.getAnimalSpecies()));
+                            if ((canBeShared && sameClass) || isEmpty) {
+                                hasMoved = true;
+                            }
+                        }
+                    }
+                }
+            } else {
+                System.out.println(homeType + " " + homeNumber + " is full");
+            }
 
-            for (Animal b : selectedListOfContainer.get(homeNumber).getResidents()) {
-                boolean isEmpty = selectedListOfContainer.get(homeNumber).getResidents().isEmpty();
-                boolean canBeShared = containerType.get(keys[2]).contains(b.getAnimalSpecies()) && containerType.get(keys[2]).contains(movingAnimals.getAnimalSpecies());
-                boolean sameClass = animalClass.get(b.getAnimalSpecies()).equals(animalClass.get(movingAnimals.getAnimalSpecies()));
-                if ((canBeShared && sameClass) || isEmpty) {
-                    hasMoved = true;
-                    Animal animal = new Animal(movingAnimals.getAnimalSpecies(), animalNickname, homeType, homeNumber);
-                    selectedListOfContainer.get(homeNumber).modifyContainer(true, animal);
+            if (hasMoved) {
+                Animal animal = new Animal(movingAnimals.getAnimalSpecies(), animalNickname, homeType, homeNumber);
+                selectedListOfContainer.get(homeNumber).modifyContainer(true, animal);
+                ArrayList<Container> previousListOfContainers = getSelectedContainer(movingAnimals.getHomeType());
+                previousListOfContainers.get(movingAnimals.getHomeNumber()).modifyContainer(false, movingAnimals);
+            }
 
-                    ArrayList<Container> previousListOfContainers = getSelectedContainer(movingAnimals.getHomeType());
-                    previousListOfContainers.get(movingAnimals.getHomeNumber()).modifyContainer(false, movingAnimals);
+            updateContainers(homeType);
+        } else {
+            System.out.println("There is no such an animal " + animalNickname + " in our zoo");
+        }
+        return hasMoved;
+     }
+
+     boolean removeSpecies(String animalNickname) {
+        boolean isRemoved = false;
+        Animal removedAnimal = searchAnimal(animalNickname);
+
+        if (removedAnimal.getHomeNumber() != -1) {
+            selectedListOfContainer = getSelectedContainer(removedAnimal.getHomeType());
+            selectedListOfContainer.get(removedAnimal.homeNumber).modifyContainer(false, removedAnimal);
+            updateContainers(removedAnimal.getHomeType());
+            isRemoved = true;
+        } else {
+            System.out.println("There's no such animal " + animalNickname + " in our zoo");
+        }
+
+
+        return isRemoved;
+     }
+
+     void outputTenantList() {
+        if (listOfEnclosures.size() != 0 && listOfCages.size() != 0) {
+            for (int i = 0; i < listOfCages.size(); i++) {
+                for (int k = 0; k < listOfCages.get(i).getResidents().size(); k++) {
+                    System.out.print("Cage " + i + ": ");
+                    String species = listOfCages.get(i).getResidents().get(k).getAnimalSpecies();
+                    String name = listOfCages.get(i).getResidents().get(k).getAnimalNickname();
+                    System.out.println(species + " " + name);
                 }
             }
 
+            for (int i = 0; i < listOfEnclosures.size(); i++) {
+                for (int k = 0; k < listOfEnclosures.get(i).getResidents().size(); k++) {
+                    System.out.print("Enclosure " + i + ": ");
+                    String species = listOfEnclosures.get(i).getResidents().get(k).getAnimalSpecies();
+                    String name = listOfEnclosures.get(i).getResidents().get(k).getAnimalNickname();
+                    System.out.println(species + " " + name);
+                }
+            }
         } else {
-            System.out.println(homeType + " " + homeNumber + " is full");
+            System.out.println("The zoo is empty, put some animal in it!");
         }
-
-        updateContainers(homeType);
-
-        return hasMoved;
      }
 
 }

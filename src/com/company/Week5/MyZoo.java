@@ -28,12 +28,12 @@ public class MyZoo extends ZooResource implements Zoo{
 
     @Override
     public boolean removeAnimal(String animalNickname) {
-        return false;
+        return removeSpecies(animalNickname);
     }
 
     @Override
     public void listOfTenants() {
-
+        outputTenantList();
     }
 
     public static void main(String[] args) {
@@ -61,5 +61,12 @@ public class MyZoo extends ZooResource implements Zoo{
         System.out.println(myZoo.feedAnimals("Enclosure", 0, 200, "Meat"));
         System.out.println(myZoo.relocateAnimal("Bagheera", "Enclosure", 1));
         System.out.println(myZoo.relocateAnimal("Bagheera", "Enclosure", 2));
+        System.out.println(myZoo.accomodateAnimal("Zebra", "Sid", "Enclosure",1));
+        System.out.println(myZoo.removeAnimal("Bagheera"));
+        System.out.println(myZoo.relocateAnimal("Bagheera", "Enclosure", 3));
+        System.out.println(myZoo.accomodateAnimal("Tiger", "Tom", "Cage",1));
+        System.out.println(myZoo.buyFood("Meat", 20));
+        System.out.println(myZoo.buyFood("Carrot", 20));
+        myZoo.listOfTenants();
     }
 }

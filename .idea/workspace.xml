@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="523096fa-5b36-405e-8f04-02545ae9b650" name="Changes" comment="" />
+    <list default="true" id="523096fa-5b36-405e-8f04-02545ae9b650" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/2IP90/com/company/Week5/MyZoo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/2IP90/com/company/Week5/MyZoo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/2IP90/com/company/Week5/ZooResource.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/2IP90/com/company/Week5/ZooResource.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/company/Week5/Animal.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/company/Week5/Container.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/company/Week5/MyZoo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/Week5/MyZoo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/company/Week5/ZooResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/Week5/ZooResource.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -26,6 +34,9 @@
     </file-type-list>
   </component>
   <component name="ProjectId" id="1ybPgSn5NVEN0jyzFVGcG9SOY97" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -35,6 +46,11 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/com/company/Week5/ZooStuff" />
+    </key>
   </component>
   <component name="RunManager" selected="Application.MyZoo">
     <configuration name="GFG" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -102,6 +118,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.GFG" />
+      <item itemvalue="Application.MyZoo" />
+      <item itemvalue="Application.ReturnTest" />
+      <item itemvalue="Application.TestCases" />
+      <item itemvalue="Application.MadTrucker" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.MyZoo" />
@@ -179,6 +202,9 @@
     </task>
     <option name="localTasksCounter" value="9" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Fix input error in part 1&#10;Fix some part 1 bug" />
